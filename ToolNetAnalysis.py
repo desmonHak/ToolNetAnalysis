@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from os import getuid
 from sys import exit, argv
 from random import randint
+from scapy.all import get_working_if, get_if_addr, get_if_hwaddr
 
 if __name__ == "__main__":
     
@@ -29,17 +30,20 @@ if __name__ == "__main__":
         parser.add_argument(
                                 "--iface",        
                                 help="especificar la interfaz", 
-                                type=str
+                                type=str,
+                                default=get_working_if()
                             )
         parser.add_argument(
                                 "--ip-range",     
                                 help="identificador de la red junto a mascara de red. Ejemplo(192.168.1.1/24)", 
-                                type=str
+                                type=str,
+                                default=None
                             )
         parser.add_argument(
                                 "--ip-objetivo",  
                                 help="ip objetivo", 
-                                type=str
+                                type=str,
+                                default=None
                             )
         parser.add_argument(
                                 "--ping-spoof",          
@@ -55,8 +59,15 @@ if __name__ == "__main__":
                             )
         parser.add_argument(
                                 "--ip-spoof",            
-                                help="usar una direccion para spoofear", 
-                                type=str
+                                help="Usar una direccion IP para spoofear", 
+                                type=str,
+                                default=None,
+                            )
+        parser.add_argument(
+                                "--mac-spoof",            
+                                help="Usar una direccion MAC para spoofear", 
+                                type=str,
+                                default=None,
                             )
         parser.add_argument(
                                 "--ttl-packet",          
@@ -92,18 +103,29 @@ if __name__ == "__main__":
                                 action=ListIface
                             )
         
-        scan = Scan()
-        
         if len(argv) <= 1:
             print(colors.POINTRED("Usted no introducio parametro alguno. Modo de uso:"))
             parser.print_help()   
             exit(0)
-        
         parser = parser.parse_args()
+
         
-        print(parser.ttl_packet_random)
         if parser.ttl_packet_random != None:
-            ttl_random = {0:randint, 1:parser.ttl_packet_random}
+            parser.ttl_packet_random = {0:randint, 1:parser.ttl_packet_random}
+            
+            
+        scan = Scan(
+            ttl=parser.ttl_packet,
+            spoof_ip=parser.ip_spoof,
+            spoof_mac=parser.mac_spoof,
+            iface=parser.iface,
+            ip=get_if_addr(parser.iface),
+            mac=get_if_hwaddr(parser.iface),
+            ttl_random=parser.ttl_packet_random,
+            ip_objetivo=parser.ip_objetivo,
+            ip_range=parser.ip_range
+        )
+        print(scan)
         
         if parser.scan_mode_arp == True:
             scan.arp()
