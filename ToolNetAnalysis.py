@@ -7,6 +7,7 @@ from os import getuid
 from sys import exit, argv
 from random import randint
 from scapy.all import get_working_if, get_if_addr, get_if_hwaddr, conf, BrightTheme
+from time import sleep
 
 if __name__ == "__main__":
     
@@ -152,6 +153,9 @@ if __name__ == "__main__":
             scan.arp()
         
         if parser.sniff == True:
+            print(scan)
+            print(colors.POINTGREEN("El esnifeo esta apunto de"))
+            sleep(2)
             scan.sniff()
     else:
         print(colors.POINTRED("Usted no es un usuario con permisos de administrador"))

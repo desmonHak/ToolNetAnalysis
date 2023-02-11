@@ -50,7 +50,7 @@ class Options(object):
         
         self.ip_range = ip_range
         if self.ip_range != None:
-            if self.Valid_IPv4("".join(self.ip_range.split("/"))) == False:
+            if self.Valid_IPv4(self.ip_range.split("/")[0]) == False:
                 raise self.ErrorIpRange(self.ip_range)
         
         self.ttl = ttl

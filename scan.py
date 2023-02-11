@@ -78,6 +78,7 @@ class Scan(Options):
                         verbose=self.verbose, 
                         iface=self.iface
                     )[0]
+        print(data)
         if len(data) != 0:
             if self.verbose == True:
                 data.rawhexdump()
@@ -94,7 +95,7 @@ class Scan(Options):
                 if len(lista_hosts[numero_host]) == 0: lista_hosts.pop(numero_host)
                 
             for host in lista_hosts:
-                print(dir(host[0]))
+                print("{} {}".format(host[0], host[1]))
                 
             return lista_hosts
         else:
