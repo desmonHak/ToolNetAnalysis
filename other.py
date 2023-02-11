@@ -27,22 +27,31 @@ class Options(object):
             ttl_random=None,
             colors=COLOR(),
             ip_objetivo=None,
-            ip_range=None
+            ip_range=None,
+            verbose=False,
+            timeout=None
         ) -> None:
     
         self.my_ip = ip
         self.my_mac = mac
-        self.spoof_ip = spoof_ip
         self.spoof_mac = spoof_mac
         self.iface = iface
+        self.timeout = timeout
         
         self.ip_objetivo = ip_objetivo
-        if self.Valid_IPv4(self.ip_objetivo) == False:
-            raise self.ErrorIpFormat(self.ip_objetivo)
+        if self.ip_objetivo != None:
+            if self.Valid_IPv4(self.ip_objetivo) == False:
+                raise self.ErrorIpFormat(self.ip_objetivo)
+        
+        self.spoof_ip = spoof_ip
+        if self.spoof_ip != None:
+            if self.Valid_IPv4(self.spoof_ip) == False:
+                raise self.ErrorIpFormat(self.spoof_ip)
         
         self.ip_range = ip_range
-        if self.Valid_IPv4("".join(self.ip_range.split("/"))) == False:
-            raise self.ErrorIpRange(self.ip_range)
+        if self.ip_range != None:
+            if self.Valid_IPv4("".join(self.ip_range.split("/"))) == False:
+                raise self.ErrorIpRange(self.ip_range)
         
         self.ttl = ttl
         self.ttl_random = ttl_random
@@ -50,6 +59,8 @@ class Options(object):
         if ttl_random != None:
             self.ttl = self.ttl_random[1]
             self.ttl_random_status = True
+        
+        self.verbose = verbose
         
         self.colors = colors
             
@@ -71,16 +82,20 @@ class Options(object):
             TTL aleatorio = {}
             IP objetivo = {}
             IP rango objetivo = {}
+            Modo verbose = {}
+            Tiempo de espera(timeout) = {}
         """.format(
-            str(self.iface),
-            str(self.my_ip), 
-            str(self.my_mac), 
-            str(self.spoof_ip),
-            str(self.spoof_mac),
-            str(self.ttl),
-            str(self.ttl_random_status),
-            str(self.ip_objetivo),
-            str(self.ip_range)
+            self.iface,
+            self.my_ip,
+            self.my_mac,
+            self.spoof_ip,
+            self.spoof_mac,
+            self.ttl,
+            self.ttl_random_status,
+            self.ip_objetivo,
+            self.ip_range,
+            self.verbose,
+            self.timeout
         )
     
 
