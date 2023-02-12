@@ -66,6 +66,11 @@ options:
 
 
 ```
+----
+# Instalacion
+```batch
+pip install -r requirements.txt
+```
 
 ----
 # Uso
