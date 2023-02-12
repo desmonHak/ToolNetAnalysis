@@ -14,7 +14,8 @@ class Scan(Options):
             ip_objetivo=None,
             ip_range=None,
             verbose=False,
-            timeout=None
+            timeout=None,
+            count=1
         ) -> None:
         super(Scan,self).__init__(
             ip=ip, 
@@ -27,7 +28,8 @@ class Scan(Options):
             ip_objetivo=ip_objetivo,
             ip_range=ip_range,
             verbose=verbose,
-            timeout=timeout
+            timeout=timeout,
+            count=count
         )
         
     def arp(self):
@@ -42,14 +44,14 @@ class Scan(Options):
             Modo verbose = {}
             Tiempo de espera(timeout) = {}
         """.format(
-            self.iface,
-            self.my_ip,
-            self.my_mac,
-            self.spoof_ip,
-            self.ip_range,
-            self.verbose,
-            self.timeout
-        )
+                self.iface,
+                self.my_ip,
+                self.my_mac,
+                self.spoof_ip,
+                self.ip_range,
+                self.verbose,
+                self.timeout
+            )
         )
         
         
@@ -60,7 +62,7 @@ class Scan(Options):
                             dst="ff:ff:ff:ff:ff:ff"
                         ) / ARP(
                             pdst=self.ip_range, 
-                            psrc=self.spoof_ip
+                            psrc=self.spoof_ip,
                         ), 
                         timeout=self.timeout, 
                         verbose=self.verbose, 
@@ -78,7 +80,7 @@ class Scan(Options):
                         verbose=self.verbose, 
                         iface=self.iface
                     )[0]
-        print(data)
+
         if len(data) != 0:
             if self.verbose == True:
                 data.rawhexdump()
@@ -86,16 +88,16 @@ class Scan(Options):
             for host in data: 
                 if self.verbose == True:
                     host[0].show2()
-                    print(host[0].payload)
+                    print("Payload: {}".format(host[0].payload))
                     host[1].show2()
-                    print(host[1].payload)
+                    print("Payload: {}".format(host[1].payload))
                 lista_hosts.append([host[1].psrc, host[1].hwsrc])
                 
             for numero_host in range(0,len(lista_hosts)): 
                 if len(lista_hosts[numero_host]) == 0: lista_hosts.pop(numero_host)
                 
             for host in lista_hosts:
-                print("{} {}".format(host[0], host[1]))
+                print(self.colors.POINTGREEN("Direcion IP:({}), direccion MAC:({})".format(host[0], host[1])))
                 
             return lista_hosts
         else:

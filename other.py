@@ -29,7 +29,8 @@ class Options(object):
             ip_objetivo=None,
             ip_range=None,
             verbose=False,
-            timeout=None
+            timeout=None,
+            count=1
         ) -> None:
     
         self.my_ip = ip
@@ -61,7 +62,7 @@ class Options(object):
             self.ttl_random_status = True
         
         self.verbose = verbose
-        
+        self.count = count
         self.colors = colors
             
     def Valid_IPv4(self, ip_direccion):
@@ -84,6 +85,7 @@ class Options(object):
             IP rango objetivo = {}
             Modo verbose = {}
             Tiempo de espera(timeout) = {}
+            Count = {}
         """.format(
             self.iface,
             self.my_ip,
@@ -95,7 +97,8 @@ class Options(object):
             self.ip_objetivo,
             self.ip_range,
             self.verbose,
-            self.timeout
+            self.timeout,
+            self.count
         )
     
 
