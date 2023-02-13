@@ -70,8 +70,8 @@ options:
 # Instalacion
 ```batch
 git clone https://github.com/desmonHak/ToolNetAnalysis.git
-pip install -r requirements.txt
 cd ToolNetAnalysis
+pip install -r requirements.txt
 git clone https://github.com/desmonHak/Colors.git
 ```
 
